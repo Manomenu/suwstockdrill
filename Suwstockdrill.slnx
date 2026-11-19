@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Suwstockdrill.Server/">
+    <Project Path="Suwstockdrill.Server/Suwstockdrill.Server.csproj" />
+    <Project Path="Suwstockdrill.Server.Tests/Suwstockdrill.Server.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Suwstockdrill.Gate/">
+    <Project Path="Suwstockdrill.Gate/Suwstockdrill.Gate.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,91 @@
+# Entry point for humans: `just` lists every recipe, grouped. Logic longer than a line or
+# two lives in scripts/.internal/, which is also what CI and agents call directly.
+
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+# The local stack in one tmux session, the one way to run it — `just tmux-dev start [--restart]|stop` (tmux-dev.just)
+mod tmux-dev
+
+[private]
+default:
+    @just --list --unsorted
+
+# Why did it fail? The last warnings and errors of the newest server log, one line each (--all, --trace <id>, --compose, -n N)
+[group('run')]
+[positional-arguments]
+logs *args:
+    @./scripts/.internal/logs.sh "$@"
+
+# Which guardrails keep each acceptance criterion of the specs true: id, kind, file:line (or one: just criteria AC-<feature>-<n>)
+[group('run')]
+[positional-arguments]
+criteria *args:
+    @./Suwstockdrill.Gate/scripts/criteria.sh "$@"
+
+# Move the pinned vdoc.py of the acceptance criteria check to the suwagent plugin's newest master
+[group('run')]
+criteria-update:
+    @./Suwstockdrill.Gate/scripts/criteria.sh --update
+
+# Regenerate the API contract (contract/openapi.json) and the web app's types from it, after changing a record the API sends or receives; then raise the contract's version in contract/package.json
+[group('dev')]
+api-types:
+    @./scripts/.internal/api-types.sh
+
+# Does the API contract break its consumers, and does its version say so? Compares contract/openapi.json with master (or the given ref) with oasdiff
+[group('dev')]
+api-diff *args:
+    @./scripts/.internal/api-diff.sh {{ args }}
+
+# Which tests adapt this app to another repository's contract, and to which version (or one: just contracts rabaty@v2)
+[group('dev')]
+[positional-arguments]
+contracts *args:
+    @./scripts/.internal/contracts.sh "$@"
+
+# Browser tests (Playwright) against a real server and an empty database of their own; not part of `just check`
+[group('maintenance')]
+e2e *args:
+    @./scripts/.internal/e2e.sh {{ args }}
+
+# The whole gate: build with analyzers, csharpier, tests, the API contract and its version, shellcheck, gitleaks (the same CI runs)
+[group('maintenance')]
+check:
+    @./Suwstockdrill.Gate/scripts/check.sh
+
+# The quick gate: the repository guards, and build, csharpier, eslint, tsc, shellcheck for what changed (what the Claude Code Stop hook runs)
+[group('maintenance')]
+check-quick:
+    @./Suwstockdrill.Gate/scripts/check.sh --quick
+
+# Which .NET tests take the longest: runs them all once and lists the slowest (-n 25 for more); a report, never a check
+[group('maintenance')]
+[positional-arguments]
+slow-tests *args:
+    @./scripts/.internal/slow-tests.sh "$@"
+
+# Format the code: CSharpier for C#, Prettier for the web app
+[group('maintenance')]
+fmt:
+    dotnet tool restore >/dev/null && dotnet csharpier format .
+    cd Suwstockdrill.Web && pnpm exec prettier --write --log-level warn .
+
+# Mutation testing of the server code changed since master (Stryker.NET): a surviving mutant is a test that is too weak
+[group('maintenance')]
+mutate:
+    @./scripts/.internal/db.sh up >/dev/null
+    dotnet tool restore >/dev/null
+    cd Suwstockdrill.Server.Tests && dotnet tool run dotnet-stryker
+
+# Pack the dotnet new template as a NuGet package into .artifacts/nupkg
+[group('dev')]
+pack-template:
+    dotnet pack pack/Solid.DotnetApp.Template.csproj -o .artifacts/nupkg
+
+# Install tools and packages from the lockfiles, and enable the git hooks
+[group('maintenance')]
+sync:
+    git config core.hooksPath .githooks
+    dotnet tool restore
+    dotnet restore Suwstockdrill.slnx
+    cd Suwstockdrill.Web && pnpm install --frozen-lockfile
