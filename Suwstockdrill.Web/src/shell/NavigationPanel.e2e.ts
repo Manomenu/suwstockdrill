@@ -12,13 +12,16 @@ async function widthOf(page: Page, selector: string): Promise<number> {
     return box.width;
 }
 
-test("the start address opens the first area, and every item opens its screen and is marked", async ({ page }) => {
+test("the start address opens the first area, and every item opens its screen, named in the browser tab, and is marked", async ({
+    page,
+}) => {
     await page.goto("/");
     await expect(page).toHaveURL(/\/companies$/);
 
     for (const area of AREAS) {
         await navigationOf(page).getByRole("link", { name: area, exact: true }).click();
         await expect(page.getByRole("heading", { level: 1, name: area, exact: true })).toBeVisible();
+        await expect(page).toHaveTitle(`${area} · Suwstockdrill`);
         await expect(navigationOf(page).getByRole("link", { name: area, exact: true })).toHaveAttribute("aria-current", "page");
     }
 });
