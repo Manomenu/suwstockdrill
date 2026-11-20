@@ -1,4 +1,4 @@
-import { Page } from "@/design/page";
+import { Page } from "@maniumek/suwfrontkit";
 
 export function BriefsScreen() {
     return (

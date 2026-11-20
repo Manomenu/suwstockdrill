@@ -1,4 +1,3 @@
-// A user adds a note and sees it in the list, through the same /api path the container stack uses.
 import { expect, test } from "@playwright/test";
 
 test("a note added on the Notes screen appears in the list", async ({ page }) => {
@@ -11,10 +10,10 @@ test("a note added on the Notes screen appears in the list", async ({ page }) =>
     await expect(page.getByText(text, { exact: true })).toBeVisible();
 });
 
-test("a blank note is refused with a sentence", async ({ page }) => {
+test("a blank note is refused with a sentence under the field", async ({ page }) => {
     await page.goto("/notes");
 
     await page.getByRole("button", { name: "Add note", exact: true }).click();
 
-    await expect(page.getByRole("alert")).toHaveText("Write something first.");
+    await expect(page.getByLabel("New note")).toHaveAccessibleDescription("Write something first.");
 });

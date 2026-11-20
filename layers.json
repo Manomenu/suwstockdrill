@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "Suwstockdrill.Server": { "layers": ["Api", "Notes"], "internalsVisibleTo": ["Suwstockdrill.Gate", "Suwstockdrill.Server.Tests"] },
+    "Suwstockdrill.Server.Tests": { "references": ["Suwstockdrill.Server"] },
+    "Suwstockdrill.Gate": { "references": ["Suwstockdrill.Server"] }
+  }
+}
