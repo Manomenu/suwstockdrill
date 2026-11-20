@@ -1,4 +1,5 @@
-import { Redirect, Route, Switch } from "wouter";
+import { ErrorBoundary } from "@maniumek/suwfrontkit";
+import { Redirect, Route, Switch, useLocation } from "wouter";
 
 import { BacktestsScreen } from "./backtests/BacktestsScreen";
 import { BriefsScreen } from "./briefs/BriefsScreen";
@@ -12,21 +13,25 @@ import { Shell } from "./shell/Shell";
 import { ThesisScreen } from "./thesis/ThesisScreen";
 
 export function App() {
+    const [pathname] = useLocation();
+
     return (
         <Shell>
-            <Switch>
-                <Route path="/companies" component={CompaniesScreen} />
-                <Route path="/thesis" component={ThesisScreen} />
-                <Route path="/monitoring" component={MonitoringScreen} />
-                <Route path="/briefs" component={BriefsScreen} />
-                <Route path="/notebook" component={NotebookScreen} />
-                <Route path="/portfolio" component={PortfolioScreen} />
-                <Route path="/backtests" component={BacktestsScreen} />
-                <Route path="/notes" component={NotesScreen} />
-                <Route>
-                    <Redirect to={HOME_HREF} replace />
-                </Route>
-            </Switch>
+            <ErrorBoundary key={pathname}>
+                <Switch>
+                    <Route path="/companies" component={CompaniesScreen} />
+                    <Route path="/thesis" component={ThesisScreen} />
+                    <Route path="/monitoring" component={MonitoringScreen} />
+                    <Route path="/briefs" component={BriefsScreen} />
+                    <Route path="/notebook" component={NotebookScreen} />
+                    <Route path="/portfolio" component={PortfolioScreen} />
+                    <Route path="/backtests" component={BacktestsScreen} />
+                    <Route path="/notes" component={NotesScreen} />
+                    <Route>
+                        <Redirect to={HOME_HREF} replace />
+                    </Route>
+                </Switch>
+            </ErrorBoundary>
         </Shell>
     );
 }
