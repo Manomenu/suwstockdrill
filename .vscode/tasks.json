@@ -1,11 +1,10 @@
 {
-    // Each task only calls a script of scripts/.internal: nothing is duplicated here.
     "version": "2.0.0",
     "tasks": [
         {
             "label": "check --quick",
             "type": "shell",
-            "command": "bash Suwstockdrill.Gate/scripts/check.sh --quick",
+            "command": "Suwstockdrill.Web/node_modules/.bin/suwgate check --quick",
             "group": { "kind": "test", "isDefault": true },
             "presentation": { "reveal": "always", "panel": "dedicated" },
             "problemMatcher": []
@@ -13,7 +12,7 @@
         {
             "label": "check (full gate)",
             "type": "shell",
-            "command": "bash Suwstockdrill.Gate/scripts/check.sh",
+            "command": "Suwstockdrill.Web/node_modules/.bin/suwgate check",
             "group": "test",
             "presentation": { "reveal": "always", "panel": "dedicated" },
             "problemMatcher": []
@@ -29,7 +28,7 @@
         {
             "label": "logs",
             "type": "shell",
-            "command": "bash scripts/.internal/logs.sh",
+            "command": "Suwstockdrill.Web/node_modules/.bin/suwgate dev logs",
             "presentation": { "reveal": "always", "panel": "shared" },
             "problemMatcher": []
         }

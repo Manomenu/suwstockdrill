@@ -7,14 +7,13 @@ import { MonitoringScreen } from "./monitoring/MonitoringScreen";
 import { NotebookScreen } from "./notebook/NotebookScreen";
 import { NotesScreen } from "./notes/NotesScreen";
 import { PortfolioScreen } from "./portfolio/PortfolioScreen";
-import { AppShell } from "./shell/AppShell";
 import { HOME_HREF } from "./shell/navigation";
+import { Shell } from "./shell/Shell";
 import { ThesisScreen } from "./thesis/ThesisScreen";
 
-/** Puts the page together from features. */
 export function App() {
     return (
-        <AppShell>
+        <Shell>
             <Switch>
                 <Route path="/companies" component={CompaniesScreen} />
                 <Route path="/thesis" component={ThesisScreen} />
@@ -28,6 +27,6 @@ export function App() {
                     <Redirect to={HOME_HREF} replace />
                 </Route>
             </Switch>
-        </AppShell>
+        </Shell>
     );
 }

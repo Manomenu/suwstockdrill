@@ -1,24 +1,25 @@
+import { Building2, ChartNoAxesCombined, FileText, Lightbulb, NotebookPen, Radar, StickyNote, Wallet, type LucideIcon } from "lucide-react";
+
 export interface NavigationItem {
     label: string;
     href: string;
+    icon: LucideIcon;
 }
 
 export const MAIN_ITEMS: readonly NavigationItem[] = [
-    { label: "Spółki", href: "/companies" },
-    { label: "Teza", href: "/thesis" },
-    { label: "Monitoring", href: "/monitoring" },
-    { label: "Briefy", href: "/briefs" },
-    { label: "Notatnik", href: "/notebook" },
-    { label: "Portfel", href: "/portfolio" },
-    { label: "Backtesty", href: "/backtests" },
+    { label: "Spółki", href: "/companies", icon: Building2 },
+    { label: "Teza", href: "/thesis", icon: Lightbulb },
+    { label: "Monitoring", href: "/monitoring", icon: Radar },
+    { label: "Briefy", href: "/briefs", icon: FileText },
+    { label: "Notatnik", href: "/notebook", icon: NotebookPen },
+    { label: "Portfel", href: "/portfolio", icon: Wallet },
+    { label: "Backtesty", href: "/backtests", icon: ChartNoAxesCombined },
 ];
 
-// Why: the template's example feature stays reachable as the pattern for new features, apart from the product's own.
-export const EXAMPLE_ITEM: NavigationItem = { label: "Notes (przykład)", href: "/notes" };
+export const EXAMPLE_ITEM: NavigationItem = { label: "Notes (przykład)", href: "/notes", icon: StickyNote };
 
 export const HOME_HREF = "/companies";
 
-// Why: a screen under an item (a company's report under /companies) keeps the item marked, unlike wouter's exact-match active link.
 export function isCurrent(pathname: string, href: string): boolean {
     return pathname === href || pathname.startsWith(`${href}/`);
 }

@@ -1,8 +1,0 @@
-{
-  "serverLayers": ["Api", "Notes | Health", "Database"],
-  "projects": {
-    "Suwstockdrill.Server": { "references": [], "internalsVisibleTo": ["Suwstockdrill.Gate", "Suwstockdrill.Server.Tests"] },
-    "Suwstockdrill.Server.Tests": { "references": ["Suwstockdrill.Server"], "internalsVisibleTo": [] },
-    "Suwstockdrill.Gate": { "references": ["Suwstockdrill.Server"], "internalsVisibleTo": [] }
-  }
-}

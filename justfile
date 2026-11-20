@@ -1,7 +1,6 @@
-# Entry point for humans: `just` lists every recipe, grouped. Logic longer than a line or
-# two lives in scripts/.internal/, which is also what CI and agents call directly.
-
 set shell := ["bash", "-euo", "pipefail", "-c"]
+
+suwgate := "Suwstockdrill.Web/node_modules/.bin/suwgate"
 
 # The local stack in one tmux session, the one way to run it — `just tmux-dev start [--restart]|stop` (tmux-dev.just)
 mod tmux-dev
@@ -14,49 +13,37 @@ default:
 [group('run')]
 [positional-arguments]
 logs *args:
-    @./scripts/.internal/logs.sh "$@"
+    @{{ suwgate }} dev logs "$@"
 
-# Which guardrails keep each acceptance criterion of the specs true: id, kind, file:line (or one: just criteria AC-<feature>-<n>)
+# The local PostgreSQL of compose.yaml: up, down, reset, psql, logs, status
 [group('run')]
-[positional-arguments]
-criteria *args:
-    @./Suwstockdrill.Gate/scripts/criteria.sh "$@"
+db *args:
+    @{{ suwgate }} dev db {{ args }}
 
-# Move the pinned vdoc.py of the acceptance criteria check to the suwagent plugin's newest master
+# Smoke test of the running container stack (just smoke, or just smoke <base-url>)
 [group('run')]
-criteria-update:
-    @./Suwstockdrill.Gate/scripts/criteria.sh --update
+smoke *args:
+    @{{ suwgate }} dev smoke {{ args }}
 
 # Regenerate the API contract (contract/openapi.json) and the web app's types from it, after changing a record the API sends or receives; then raise the contract's version in contract/package.json
 [group('dev')]
 api-types:
     @./scripts/.internal/api-types.sh
 
-# Does the API contract break its consumers, and does its version say so? Compares contract/openapi.json with master (or the given ref) with oasdiff
-[group('dev')]
-api-diff *args:
-    @./scripts/.internal/api-diff.sh {{ args }}
-
-# Which tests adapt this app to another repository's contract, and to which version (or one: just contracts rabaty@v2)
-[group('dev')]
-[positional-arguments]
-contracts *args:
-    @./scripts/.internal/contracts.sh "$@"
-
 # Browser tests (Playwright) against a real server and an empty database of their own; not part of `just check`
 [group('maintenance')]
 e2e *args:
     @./scripts/.internal/e2e.sh {{ args }}
 
-# The whole gate: build with analyzers, csharpier, tests, the API contract and its version, shellcheck, gitleaks (the same CI runs)
+# The whole gate: build with analyzers, csharpier, every test, the web checks, the API contract and its version, acceptance criteria, shellcheck, gitleaks (the same CI runs)
 [group('maintenance')]
 check:
-    @./Suwstockdrill.Gate/scripts/check.sh
+    @{{ suwgate }} check
 
-# The quick gate: the repository guards, and build, csharpier, eslint, tsc, shellcheck for what changed (what the Claude Code Stop hook runs)
+# The quick gate: the repository guards, and build, csharpier, the .NET guards, eslint, tsc, shellcheck for what changed (what the Claude Code Stop hook runs)
 [group('maintenance')]
 check-quick:
-    @./Suwstockdrill.Gate/scripts/check.sh --quick
+    @{{ suwgate }} check --quick
 
 # Which .NET tests take the longest: runs them all once and lists the slowest (-n 25 for more); a report, never a check
 [group('maintenance')]
@@ -73,7 +60,7 @@ fmt:
 # Mutation testing of the server code changed since master (Stryker.NET): a surviving mutant is a test that is too weak
 [group('maintenance')]
 mutate:
-    @./scripts/.internal/db.sh up >/dev/null
+    @{{ suwgate }} dev db up >/dev/null
     dotnet tool restore >/dev/null
     cd Suwstockdrill.Server.Tests && dotnet tool run dotnet-stryker
 

@@ -1,31 +1,25 @@
+import { Alert, Button, Field, Input, Page } from "@maniumek/suwfrontkit";
 import { useEffect, useState } from "react";
 
-import { Alert } from "@/design/alert";
-import { Button } from "@/design/button";
-import { Input } from "@/design/input";
-import { Label } from "@/design/label";
-import { Page } from "@/design/page";
-
 import { createNote, fetchNotes, type Note } from "./api";
-import { problemWith } from "./notes";
+import { MAX_NOTE_LENGTH, problemWith } from "./notes";
 
 function messageOf(error: unknown): string {
     return error instanceof Error ? error.message : String(error);
 }
 
-/** The Notes screen: the list, and a field to add one. The template's example feature; delete it when it is in the way. */
 export function NotesScreen() {
     const [notes, setNotes] = useState<Note[]>([]);
     const [text, setText] = useState("");
-    const [error, setError] = useState<string | null>(null);
+    const [mistake, setMistake] = useState<string | null>(null);
+    const [failure, setFailure] = useState<string | null>(null);
 
     useEffect(() => {
-        // StrictMode runs effects twice in development: abort the first request, ignore its result.
         const controller = new AbortController();
         fetchNotes(controller.signal)
             .then(setNotes)
             .catch((e: unknown) => {
-                if (!controller.signal.aborted) setError(messageOf(e));
+                if (!controller.signal.aborted) setFailure(messageOf(e));
             });
         return () => {
             controller.abort();
@@ -34,48 +28,51 @@ export function NotesScreen() {
 
     function add() {
         const problem = problemWith(text);
-        if (problem !== null) {
-            setError(problem);
-            return;
-        }
-        setError(null);
+        setMistake(problem);
+        if (problem !== null) return;
+        setFailure(null);
         createNote(text)
             .then((note) => {
                 setNotes((current) => [note, ...current]);
                 setText("");
             })
             .catch((e: unknown) => {
-                setError(messageOf(e));
+                setFailure(messageOf(e));
             });
     }
 
     return (
-        <Page title="Notes">
-            <div className="flex max-w-xl flex-col gap-4">
-                <div className="flex items-end gap-2">
-                    <div className="flex flex-1 flex-col gap-2">
-                        <Label htmlFor="new-note">New note</Label>
-                        <Input
-                            id="new-note"
-                            value={text}
-                            onChange={(event) => {
-                                setText(event.currentTarget.value);
-                            }}
-                        />
-                    </div>
-                    <Button onClick={add}>Add note</Button>
-                </div>
-                {error !== null && <Alert variant="destructive">{error}</Alert>}
-                {notes.length === 0 ? (
-                    <p className="text-muted-foreground">No notes yet.</p>
-                ) : (
-                    <ul className="list-disc pl-6">
-                        {notes.map((note) => (
-                            <li key={note.id}>{note.text}</li>
-                        ))}
-                    </ul>
+        <Page title="Notes" width="reading">
+            <Field
+                prefix="notes"
+                name="new-note"
+                label="New note"
+                hint={`At most ${MAX_NOTE_LENGTH} characters.`}
+                errors={mistake === null ? [] : [mistake]}
+            >
+                {(field) => (
+                    <Input
+                        {...field}
+                        value={text}
+                        onChange={(event) => {
+                            setText(event.currentTarget.value);
+                        }}
+                    />
                 )}
-            </div>
+            </Field>
+            <Button className="self-start" onClick={add}>
+                Add note
+            </Button>
+            {failure !== null && <Alert variant="destructive">{failure}</Alert>}
+            {notes.length === 0 ? (
+                <p className="text-muted-foreground">No notes yet.</p>
+            ) : (
+                <ul className="list-disc pl-6">
+                    {notes.map((note) => (
+                        <li key={note.id}>{note.text}</li>
+                    ))}
+                </ul>
+            )}
         </Page>
     );
 }
