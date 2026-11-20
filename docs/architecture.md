@@ -9,16 +9,16 @@ lines: a new top-level folder needs its line here, a deleted one loses it.
 - `Suwstockdrill.Server/` — the HTTP API (ASP.NET Core minimal APIs, Dapper with hand-written SQL) on NuGet `Suwbackkit.Server` and `Suwbackkit.Postgres`. One folder and namespace per feature: `Api/` wires the routes, `Notes/` is the example feature.
 - `Suwstockdrill.Server/Database/Migrations/up/` — numbered SQL migrations, applied at start-up by `Suwbackkit.Postgres` (grate) and never edited afterwards.
 - `Suwstockdrill.Server.Tests/` — xUnit v3 tests against a real PostgreSQL. Mirrors the server's folders; `Characterization/` holds behaviour recorded before changing legacy code.
-- `Suwstockdrill.Gate/` — the xUnit project that calls the .NET guards of NuGet `Suwgate.Architecture` and `Suwgate.Database` (`ArchitectureTests`), and the template's own `TemplateTests`; `suwgate check --quick` runs it.
+- `Suwstockdrill.Gate/` — the xUnit project that calls the .NET guards of NuGet `Suwgate.Architecture` and `Suwgate.Database` (`GuardTests`); `suwgate check --quick` runs it.
 - `Suwstockdrill.Web/` — the web app (React 19, Tailwind 4, Vite, TypeScript strict, pnpm), styled by `@maniumek/suwfrontkit`. A folder per feature under `src/` (`notes/` is the example); `src/api/` the HTTP client and the generated `openapi.d.ts`. Its packages include the gate, `@maniumek/suwgate`.
 - `compose.yaml` — the whole stack on a laptop from the same Dockerfiles: db (profile `db`), server, web; everything configured from `.env` (`.env.example`) with ASP.NET names (`Section__Key`); only web publishes a port (8230).
 - `Suwstockdrill.Server/Dockerfile`, `Suwstockdrill.Web/Dockerfile` — the two images (pinned bases, locked restore, build context is the repo root); the web image is nginx serving the build and proxying `/api` to the server.
 - `.dockerignore` — keeps `node_modules`, `bin`, `obj` and `.env` out of the build context.
-- `.github/` — `workflows/ci.yml`: the gate (suwgate's reusable gate workflow), the browser tests (`e2e`), and the images built and smoke-tested (`build`); nothing is published, the registry is project-specific.
+- `.github/` — `workflows/ci.yml`: the gate (suwgate's reusable gate workflow, the browser tests and the database included), and the images built and smoke-tested (`build`); nothing is published, the registry is project-specific.
 - `.vscode/` — the editor's glue, shared: recommended extensions, formatter per language, the schema of `suwgate.yml`, file nesting, debug launch, tasks that run the gate. No style rules (they live in `.editorconfig` and the formatters' configs, so Rider agrees).
 - `.githooks/` — `pre-commit` runs `suwgate hook pre-commit`: gitleaks on what is being committed, then the quick gate; `just sync` enables it.
 - `docs/` — documentation for people working on the repo: this map, `development.md`, the specs in `visual/spec/` (their acceptance criteria live as guardrails, see AGENTS.md), decisions above one feature in `adr/`.
-- `scripts/` — `scripts/.internal/` holds the tools of this app that `just` runs: `api-types.sh`, `e2e.sh`, `slow-tests.sh`; the local stack is `suwgate dev`. The gate refuses a script that nothing calls.
+- `scripts/` — `scripts/.internal/` holds the tools of this app that `just` runs: `api-types.sh`, `slow-tests.sh`; the local stack is `suwgate dev`. The gate refuses a script that nothing calls.
 - `.claude/` — the committed Claude Code settings: `suwgate hook stop` runs the quick gate when Claude stops, `suwgate hook guard-edit` protects migrations, generated files, and the gate with the lint configs (`ALLOW_GATE_EDIT=1 claude` lifts the last).
 - `.config/` — `dotnet-tools.json`: the pinned CSharpier.
 - `contract/` — the API contract (`openapi.json`) and its version (`package.json`), generated and committed for consumers.
@@ -39,8 +39,9 @@ is its own:
 - `suwgate.yml`: the profiles, where the web app lives, the steps it skips and the exceptions, each with its reason, the edit hook's
   extra files, and the names and ports of the local stack (`suwgate dev`). The ports are written out because the template shifts them.
 - `layers.json`: the order of the server's layers and which project may reference which; the app's own design.
-- `Suwstockdrill.Gate/`: one call of `Guards.Verify` per .NET guard of `Suwgate.Architecture` and `Suwgate.Database`, with this app's arguments
-  (its assemblies, layers file, solution, migrations folder, test fixture). It stays a project of its own, apart from
+- `Suwstockdrill.Gate/`: one test that runs every .NET guard of `Suwgate.Architecture` and `Suwgate.Database` (`SuwgateGuards.VerifyAll`), given
+  only what suwgate cannot find itself: the server's assembly, the gate's own and the type that maps the endpoints; `dotnet-test` fails when
+  a guard did not run. It stays a project of its own, apart from
   `Suwstockdrill.Server.Tests`, because `suwgate check --quick` runs every test of a project that uses those packages: here that is a few
   seconds without a database, while the server tests need PostgreSQL and start the server.
 - `Directory.Build.props` and `.editorconfig`: the build defaults, the banned APIs and the analyzer rules come from `Suwgate.Architecture`
@@ -136,8 +137,6 @@ Server and gate:
   the tests about five times slower. Each test still works on data of its own.
 - The deletion guard (architecture/no-unused-types) gets `ServerApp` as an entry point, because the top-level `Program` that starts it has a
   generated `Main` the architecture reader does not see.
-- The browser-test run (`e2e.sh`) drops and creates its database in two commands, because `CREATE DATABASE` cannot run inside the one transaction a single
-  `-c` would be.
 
 Web:
 
@@ -154,7 +153,7 @@ Web:
 - The shell (`src/shell/`) is suwfrontkit's `AppShell` with this app's icon, title and navigation (icons from lucide-react) and wouter
   for the routes. A screen under an area (a company's report under `/companies`) keeps the area marked, which wouter's exact-match active
   link would not, so the shell marks by prefix (`isCurrent`). Desktop only (16:9 and 21:9): no narrow-screen layout.
-- Browser tests start their own server and web app on their own ports and an empty database (`e2e.sh`), so what runs by hand and its
+- Browser tests start their own server and web app on their own ports and an empty database (the gate's `e2e` step), so what runs by hand and its
   data stay untouched.
 
 ## How code is split
