@@ -1,0 +1,56 @@
+name: scratch-called
+
+on:
+  workflow_call:
+    outputs:
+      proven:
+        value: ${{ jobs.proof.outputs.proven }}
+
+permissions: {}
+
+jobs:
+  proof:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      statuses: read
+      pull-requests: read
+    outputs:
+      proven: "true"
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          echo "pulls of merge commit 09fc192:"; gh api "repos/$REPO/commits/09fc1926065cd2139f720e84f43242de6448d46a/pulls" --jq '.[] | "\(.number) \(.head.sha)"'
+          echo "statuses of c09ddf0:"; gh api "repos/$REPO/commits/c09ddf0e4dcd12b31398352bc2610932bad1fa86/statuses" --jq 'length'
+          echo "tree of $SHA:"; gh api "repos/$REPO/git/commits/$SHA" --jq .tree.sha
+
+  gate:
+    needs: proof
+    if: needs.proof.outputs.proven != 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo would gate
+
+  slow:
+    runs-on: ubuntu-24.04
+    concurrency:
+      group: scratch-slow-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - run: sleep 120
+
+  stamp:
+    needs: [proof, slow]
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      statuses: write
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: gh api -X POST "repos/$REPO/statuses/$HEAD" -f state=success -f context=ci/scratch -f description=test --jq .id

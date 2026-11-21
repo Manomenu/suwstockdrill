@@ -1,0 +1,22 @@
+name: scratch
+
+on:
+  push:
+    branches: ["ci-scratch/**"]
+  pull_request:
+
+permissions: {}
+
+jobs:
+  called:
+    permissions:
+      contents: read
+      statuses: write
+      pull-requests: read
+    uses: ./.github/workflows/scratch-called.yml
+
+  after:
+    needs: called
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "called result=${{ needs.called.result }} proven=${{ needs.called.outputs.proven }}"
