@@ -4,7 +4,7 @@ WORKDIR /app
 COPY Suwstockdrill.Web/package.json Suwstockdrill.Web/pnpm-lock.yaml Suwstockdrill.Web/pnpm-workspace.yaml ./
 RUN corepack enable && pnpm install --frozen-lockfile
 COPY Suwstockdrill.Web/ ./
-RUN pnpm build
+RUN pnpm exec vite build
 
 FROM docker.io/nginxinc/nginx-unprivileged:1.29.3-alpine
 ENV NGINX_ENVSUBST_FILTER="^(API_UPSTREAM|NGINX_LOCAL_RESOLVERS)$"
