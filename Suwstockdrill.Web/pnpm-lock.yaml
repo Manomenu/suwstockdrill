@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@maniumek/suwfrontkit':
-        specifier: 0.11.1
-        version: 0.11.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(tailwindcss@4.3.5)
+        specifier: 0.14.0
+        version: 0.14.0(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(tailwindcss@4.3.5)
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.5(vite@7.3.8(@types/node@26.6.6)(jiti@2.7.0)(lightningcss@1.33.0)(yaml@2.9.1))
       lucide-react:
-        specifier: 1.76.0
-        version: 1.76.0(@types/react@19.3.0)(react@19.3.1)
+        specifier: 1.77.0
+        version: 1.77.0(@types/react@19.3.0)(react@19.3.1)
       react:
         specifier: ^19.3.0
         version: 19.3.1
@@ -68,7 +68,7 @@ importers:
         version: 7.1.1(eslint@10.15.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
       knip:
         specifier: ^6.39.0
-        version: 6.46.1
+        version: 6.47.0
       openapi-typescript:
         specifier: ^7.13.0
         version: 7.13.0(typescript@5.9.3)
@@ -464,8 +464,8 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@maniumek/suwfrontkit@0.11.1':
-    resolution: {integrity: sha512-XnJF92TGnJhU6xAfMRFf/hz/d9tSfuyfc0ejjc/TPwsY+TVEr9AYAQBiznrMpW5eXFL4xm48brnxMfkD+c09nA==}
+  '@maniumek/suwfrontkit@0.14.0':
+    resolution: {integrity: sha512-WCQ+cfcH0i/0Xh4RR7EWWSS54m3JL7PKVVw+tA59/3G89MTRQScXWKvefEVFb/xgM3xoBVA4BVDPMxaxeLhGDg==}
     peerDependencies:
       '@tanstack/react-query': ^5.0.0
       '@xyflow/react': ^13.0.2
@@ -2365,8 +2365,8 @@ packages:
   keyv@5.6.0:
     resolution: {integrity: sha512-CYDD3SOtsHtyXeEORYRx2qBtpDJFjRTGXUtmNEMGyzYOKj1TE3tycdlho7kA1Ufx9OYWZzg52QFBGALTirzDSw==}
 
-  knip@6.46.1:
-    resolution: {integrity: sha512-5/ajqjZfmuv8O74+McrKBOSArKG6tsUgy6yJird36VZh9HiUq75qY4U39uqf9wjchEUOLrStuOZpFP057CZFRw==}
+  knip@6.47.0:
+    resolution: {integrity: sha512-nYmQnk0YqDXIJrYViJz88c8xw3tBDkpuAmofo58EkVPnKr6DnRKYtf6oIqcGVHZvXDE+gtmFuYx277/QsWng+A==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
@@ -2455,8 +2455,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@1.76.0:
-    resolution: {integrity: sha512-wRVHt2Xf64GXndB4rQOY9+3Wy9oJ59HDMYv6vwhT0hpSwUxQhG/RM9YijnOmvmIQ+VI/n+1V/FKd6gP4XL2aBQ==}
+  lucide-react@1.77.0:
+    resolution: {integrity: sha512-VS6sOi8ZUH1qm6swBL/tpI4xAhB6pFTdHvw3pfCJD+DaTJwpyynVzfOS6mdyMZ+OCdY/GMSQbqinOMOPbNSrQA==}
     peerDependencies:
       '@types/react': '*'
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -3356,7 +3356,7 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@maniumek/suwfrontkit@0.11.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(tailwindcss@4.3.5)':
+  '@maniumek/suwfrontkit@0.14.0(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(tailwindcss@4.3.5)':
     dependencies:
       '@fontsource-variable/inter': 5.3.0
       class-variance-authority: 0.7.1
@@ -5116,7 +5116,7 @@ snapshots:
     dependencies:
       '@keyv/serialize': 1.1.1
 
-  knip@6.46.1:
+  knip@6.47.0:
     dependencies:
       formatly: 0.11.4
       get-tsconfig: 4.14.3
@@ -5192,7 +5192,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@1.76.0(@types/react@19.3.0)(react@19.3.1):
+  lucide-react@1.77.0(@types/react@19.3.0)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
