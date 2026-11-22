@@ -3,8 +3,8 @@
 ## Requirements
 
 - .NET SDK 10 (`global.json` pins the band), `just`, Docker (it runs the local PostgreSQL).
-- A POSIX shell: on Windows use **Git Bash** (the gate's steps and the scripts in `scripts/.internal/` are bash).
-  Agents call `Suwstockdrill.Web/node_modules/.bin/suwgate` and the scripts directly, humans use `just`.
+- A POSIX shell: on Windows use **Git Bash** (the gate's steps are bash).
+  Agents call `Suwstockdrill.Web/node_modules/.bin/suwgate` directly, humans use `just`.
 - Node 24 and pnpm 11 (`corepack enable`), for `Suwstockdrill.Web`, whose packages include the gate (`@maniumek/suwgate`); once per machine
   `pnpm exec playwright install chromium` in `Suwstockdrill.Web/` for the browser tests.
 - For the full gate: `shellcheck`, `gitleaks`, `oasdiff`, `python3` and `curl` (the `criteria` step downloads its pinned `vdoc.py`).
@@ -22,7 +22,6 @@ just api-types            # regenerate contract/openapi.json and Suwstockdrill.W
                           # exposes; then raise the contract's version in contract/package.json
 just slow-tests           # the 10 slowest .NET tests (-n 25 for more): a report, the gate never measures time
 just mutate               # Stryker.NET (MTP runner, preview) on the server code changed since master; needs a master with commits
-just pack-template        # the dotnet new template as a NuGet package in .artifacts/nupkg
 just check-quick          # suwgate check --quick: the repository guards, and for what changed only build, csharpier, the .NET guards
                           # (Suwstockdrill.Gate), eslint, tsc, shellcheck
 just check                # suwgate check: the whole gate, every test (the browser tests with their own server, database
@@ -45,7 +44,7 @@ setting is an options class of the feature that reads it, validated with `Valida
 
 A linked git worktree gets its own test and e2e databases (`suwstockdrill_test_<suffix>`, `suwstockdrill_e2e_<suffix>`) and its own e2e
 port pair (20000-29999), so checkouts that run the browser tests at the same time do not collide. `suwgate dev checkout-env`
-(the gate's `dotnet-test` and `e2e` steps and `slow-tests.sh` apply it) derives the suffix from the directory name (lower-case, at most 30 characters, plus a hash of
+(the gate's `dotnet-test` and `e2e` steps and `suwgate dev slow-tests` apply it) derives the suffix from the directory name (lower-case, at most 30 characters, plus a hash of
 the repository and the whole name, because worktrees of one repository share a long prefix and worktrees of two repositories
 can share a name). The main checkout and CI keep the plain names and ports
 (`suwstockdrill_test`, `suwstockdrill_e2e`, 6341/3341); a value already in the environment wins. A worktree's databases are left behind, not dropped.

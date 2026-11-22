@@ -28,7 +28,7 @@ smoke *args:
 # Regenerate the API contract (contract/openapi.json) and the web app's types from it, after changing a record the API sends or receives; then raise the contract's version in contract/package.json
 [group('dev')]
 api-types:
-    @./scripts/.internal/api-types.sh
+    @{{ suwgate }} dev api-types
 
 # The whole gate: build with analyzers, csharpier, every test, the browser tests against an empty database, the web checks, the API contract and its version, acceptance criteria, shellcheck, gitleaks (the same CI runs)
 [group('maintenance')]
@@ -50,7 +50,7 @@ e2e *args:
 [group('maintenance')]
 [positional-arguments]
 slow-tests *args:
-    @./scripts/.internal/slow-tests.sh "$@"
+    @{{ suwgate }} dev slow-tests "$@"
 
 # Format the code: CSharpier for C#, Prettier for the web app
 [group('maintenance')]
@@ -64,11 +64,6 @@ mutate:
     @{{ suwgate }} dev db up >/dev/null
     dotnet tool restore >/dev/null
     cd Suwstockdrill.Server.Tests && dotnet tool run dotnet-stryker
-
-# Pack the dotnet new template as a NuGet package into .artifacts/nupkg
-[group('dev')]
-pack-template:
-    dotnet pack pack/Solid.DotnetApp.Template.csproj -o .artifacts/nupkg
 
 # Install tools and packages from the lockfiles, and enable the git hooks
 [group('maintenance')]
