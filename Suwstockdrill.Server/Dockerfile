@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0.400-alpine3.23 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0.401-alpine3.23 AS build
 WORKDIR /src
 COPY .editorconfig global.json nuget.config Directory.Build.props Directory.Build.rsp Directory.Packages.props ./
 COPY Suwstockdrill.Server/Suwstockdrill.Server.csproj Suwstockdrill.Server/packages.lock.json Suwstockdrill.Server/
