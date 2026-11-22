@@ -8,8 +8,7 @@ namespace Suwstockdrill.Server.Tests;
 
 public sealed class TestDatabase : IAsyncLifetime
 {
-    public static readonly string ConnectionString =
-        Environment.GetEnvironmentVariable("TEST_CONNECTION_STRING")
+    public static readonly string ConnectionString = Environment.GetEnvironmentVariable("TEST_CONNECTION_STRING")
         ?? "Host=127.0.0.1;Port=5573;Database=suwstockdrill_test;Username=suwstockdrill;Password=suwstockdrill";
 
     private string? unavailable;
