@@ -1,4 +1,4 @@
-FROM docker.io/library/node:24.16-alpine3.22 AS builder
+FROM docker.io/library/node:26.3-alpine3.22 AS builder
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 WORKDIR /app
 COPY Suwstockdrill.Web/package.json Suwstockdrill.Web/pnpm-lock.yaml Suwstockdrill.Web/pnpm-workspace.yaml ./
