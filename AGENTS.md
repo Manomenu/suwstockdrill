@@ -8,7 +8,7 @@ Read @AGENTS.shared.md first: the rules every repository of the stack shares. Th
 ## Commands
 
 - For people: recipes also live in a module of the whole repository beside `justfile` (`tmux-dev.just`) or in a tool's folder as `<folder>/mod.just`. `just tmux-dev start` is the one way to run the stack.
-- For agents: a script in `scripts/.internal/`, which a recipe calls. The gate is
+- For agents: the gate is
   `suwgate` (`Suwstockdrill.Web/node_modules/.bin/suwgate`), configured in `suwgate.yml`; `suwgate dev` runs the local stack.
 - `suwgate step e2e -- --headed` after changing anything a user clicks; the full `suwgate check` also runs the browser tests, against a fresh database of their own.
 
