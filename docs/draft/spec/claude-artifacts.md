@@ -14,7 +14,7 @@ source; the artifact is its published copy. Maintained by `vdoc.py register`, so
 | Notatnik inwestora | [2026-11-19-notatnik.html](2026-11-19-notatnik.html) | <https://claude.ai/artifact/JZReoKFenw9NVfMTnkCRJt> | 2026-11-19 |
 | Tracking portfela | [2026-11-19-portfel.html](2026-11-19-portfel.html) | <https://claude.ai/artifact/LMzJ6CRN2oXQbM7okAqFNb> | 2026-11-19 |
 | Raport pro | [2026-11-19-raport-pro.html](2026-11-19-raport-pro.html) | <https://claude.ai/artifact/4HMfSPnHBjJeRaREKXvbR9> | 2026-11-19 |
-| Pełny raport | [2026-11-19-raport.html](2026-11-19-raport.html) | <https://claude.ai/artifact/XmJwki7MrzG8Y7KMFP6Udm> | 2026-11-19 |
+| Pełny raport | [2026-11-19-raport.html](2026-11-19-raport.html) | <https://claude.ai/artifact/MjC4Kf87b9uM8UXvaCwgt3> | 2026-11-22 |
 | Teza inwestycyjna | [2026-11-19-teza.html](2026-11-19-teza.html) | <https://claude.ai/artifact/YPCy7Kvv4D1JTXDc7xHyMo> | 2026-11-19 |
 | Triaż źródeł | [2026-11-19-triaz-zrodel.html](2026-11-19-triaz-zrodel.html) | <https://claude.ai/artifact/VkYTFo4eMSno5aERhyUs2m> | 2026-11-19 |
 | Zenful | [2026-11-19-zenful.html](2026-11-19-zenful.html) | <https://claude.ai/artifact/ToU3LxkrBzCbQ3cSmY7mrv> | 2026-11-19 |

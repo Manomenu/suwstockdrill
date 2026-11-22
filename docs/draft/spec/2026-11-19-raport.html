@@ -380,7 +380,7 @@ pre.out { font: 12px/1.5 var(--mono); background: var(--code-bg); border: 1px so
 
 <section data-role="tldr">
   <h2>TL;DR</h2>
-  <div class="tldr"><p>Pełny raport to punkt wejścia produktu: przedstawia spółkę od zera komuś, kto nigdy o niej nie słyszał, i odpowiada na trzy pytania: <b>jak firma zarabia, co może się zepsuć, co napędza wzrost</b>. Ma dziewięć sekcji i wykres upside, a z niego powstaje teza. Każde zdanie ma źródło (<b>Źródło przy twierdzeniu</b>), całość jest <b>Zenful</b>.</p></div>
+  <div class="tldr"><p>Pełny raport to punkt wejścia produktu: przedstawia spółkę od zera komuś, kto nigdy o niej nie słyszał, i odpowiada na trzy pytania: <b>jak firma zarabia, co może się zepsuć, co napędza wzrost</b>. Każde z tych pytań ma własną sekcję, do tego karta oceny 25 pkt i wykres upside, a ostatnia sekcja to gotowy szkic tezy. Każde zdanie ma źródło (<b>Źródło przy twierdzeniu</b>), całość jest <b>Zenful</b>.</p></div>
 </section>
 
 <section data-role="problem">
@@ -391,9 +391,9 @@ pre.out { font: 12px/1.5 var(--mono); background: var(--code-bg); border: 1px so
 <section data-role="scenarios">
   <h2>Scenariusze</h2>
   <ol class="steps">
-    <li><h4>Nowa spółka</h4><p>Wpisuję „Novo Nordisk” i zamawiam pełny raport. Dostaję sedno w kilku zdaniach, potem osiem kolejnych sekcji. Na wykresie widzę cenę, ceny docelowe analityków na rok i upside.</p></li>
-    <li><h4>Z raportu do tezy</h4><p>Po lekturze tworzę tezę, automatycznie albo ręcznie (spec <b>Teza inwestycyjna</b>). Startuje monitoring.</p></li>
-    <li><h4>Alert z punktu raportu</h4><p>W Ryzykach czytam, że nie wiadomo, czy program refundacji zostanie przedłużony. Dodaję przy tym punkcie alert (spec <b>Alerty śledzące wątek</b>).</p></li>
+    <li><h4>Nowa spółka</h4><p>Wpisuję „Novo Nordisk” i zamawiam pełny raport. Dostaję sedno w kilku zdaniach, potem po kolei: jak firma zarabia, co napędza wzrost (każdy czynnik z metryką), co może się zepsuć, kartę oceny i wykres z cenami docelowymi analityków. Na końcu jest szkic tezy.</p></li>
+    <li><h4>Z raportu do tezy</h4><p>Szkic tezy na końcu raportu zbiera czynniki wzrostu i zagrożenia jako punkty do sprawdzania. Tworzę z niego tezę albo piszę ją ręcznie (spec <b>Teza inwestycyjna</b>). Startuje monitoring.</p></li>
+    <li><h4>Alert z punktu raportu</h4><p>W „Co może się zepsuć” czytam, że nie wiadomo, czy program refundacji zostanie przedłużony. Dodaję przy tym punkcie alert (spec <b>Alerty śledzące wątek</b>).</p></li>
     <li><h4>Mała spółka bez analityków</h4><p>Raport o spółce z GPW, której nikt nie rekomenduje. Wykres pokazuje samą cenę i informację, że cen docelowych brak.</p></li>
   </ol>
 </section>
@@ -401,24 +401,31 @@ pre.out { font: 12px/1.5 var(--mono); background: var(--code-bg); border: 1px so
 <section data-role="behaviour">
   <h2>Zawartość</h2>
   <table>
-    <tr><th>#</th><th>Sekcja</th></tr>
-    <tr><td>1</td><td>Sedno: o co chodzi w spółce</td></tr>
-    <tr><td>2</td><td>Rozwinięcie: o co chodzi w spółce</td></tr>
-    <tr><td>3</td><td>Model biznesowy</td></tr>
-    <tr><td>4</td><td>Konkurencja</td></tr>
-    <tr><td>5</td><td>Przychody i marża</td></tr>
-    <tr><td>6</td><td>Zarząd</td></tr>
-    <tr><td>7</td><td>Wycena</td></tr>
-    <tr><td>8</td><td>Ryzyka</td></tr>
-    <tr><td>9</td><td>Karta oceny 25-punktowa (spec <b>Karta oceny 25 pkt</b>)</td></tr>
+    <tr><th>#</th><th>Sekcja</th><th>Co zawiera</th></tr>
+    <tr><td>1</td><td>Sedno</td><td>o co chodzi w spółce, w kilku zdaniach dla kogoś, kto o niej nie słyszał</td></tr>
+    <tr><td>2</td><td>Jak firma zarabia</td><td>segmenty, źródła przychodu, marże; z tego wynika, które liczby warto śledzić</td></tr>
+    <tr><td>3</td><td>Co napędza wzrost</td><td>czynniki wzrostu; przy każdym metryka: wartość teraz, trend z ostatnich 4–8 kwartałów, źródło i próg, przy którym czynnik działa albo przestał działać. Czynnik, którego nie da się zmierzyć, jest oznaczony jako jakościowy</td></tr>
+    <tr><td>4</td><td>Co może się zepsuć</td><td>zagrożenia; przy każdym warunek, po którym widać, że się realizuje</td></tr>
+    <tr><td>5</td><td>Karta oceny 25 pkt</td><td>spec <b>Karta oceny 25 pkt</b></td></tr>
+    <tr><td>6</td><td>Wykres</td><td>aktualna cena, ceny docelowe analityków na 12 miesięcy i upside</td></tr>
+    <tr><td>7</td><td>Szkic tezy</td><td>czynniki wzrostu z sekcji 3 i zagrożenia z sekcji 4 jako punkty do sprawdzania w kolejnych wynikach; z niego powstaje teza</td></tr>
   </table>
-  <p><b>Wykres:</b> aktualna cena, ceny docelowe analityków na 12 miesięcy i upside. <b>Raport uruchamia:</b> tezę (z całego raportu) i alerty (z dowolnego punktu).</p>
+  <p><b>Raport uruchamia:</b> tezę (ze szkicu tezy) i alerty (z dowolnego punktu).</p>
   <table>
     <tr><th>Sytuacja</th><th>Zachowanie</th></tr>
     <tr><td>Nazwa pasuje do kilku spółek</td><td>wybieram spółkę z listy przed zamówieniem</td></tr>
     <tr><td>Brak cen docelowych</td><td>wykres z samą ceną i informacją o braku rekomendacji</td></tr>
+    <tr><td>Czynnik wzrostu bez metryki (np. siła marki)</td><td>oznaczony jako jakościowy, z pośrednim wskaźnikiem, jeśli taki jest (np. marża brutto)</td></tr>
     <tr><td>Raport tej spółki już istnieje</td><td>otwarte, q2</td></tr>
   </table>
+</section>
+
+<section data-role="decisions">
+  <h2>Decyzje <span class="tag note">opcjonalne</span></h2>
+  <ul>
+    <li>Sekcje raportu układają się wokół trzech pytań (jak firma zarabia, co napędza wzrost, co może się zepsuć), a nie wokół rozdziałów Taufolio. Konkurencja, zarząd i wycena nie mają osobnych sekcji: pojawiają się tylko jako czynnik wzrostu albo zagrożenie, a wycenę zastępuje wykres upside (decyzja właściciela, 2026-11-22; <b>Zenful</b>).</li>
+    <li>Raport jest materiałem do tezy, nie celem samym w sobie, dlatego kończy się szkicem tezy.</li>
+  </ul>
 </section>
 
 <section data-role="ui">
@@ -428,8 +435,11 @@ pre.out { font: 12px/1.5 var(--mono); background: var(--code-bg); border: 1px so
     <div class="wf-body">
       <div class="wf-card"><b>Sedno</b><div class="wf-line"></div><div class="wf-line"></div></div>
       <div class="wf-card wf-row"><span class="wf-grow">Cena · ceny docelowe · upside</span><span class="wf-muted">wykres</span></div>
-      <div class="wf-card wf-row"><span class="wf-grow">Ryzyka: niepewne przedłużenie programu refundacji [1]</span><span class="wf-btn">Dodaj alert</span></div>
+      <div class="wf-card wf-row"><span class="wf-grow">Jak firma zarabia: 2 segmenty, marża brutto 84% [1]</span></div>
+      <div class="wf-card wf-row"><span class="wf-grow">Co napędza wzrost: sprzedaż leków GLP-1 · +31% r/r · 8 kw. · próg &gt; 15% [2]</span></div>
+      <div class="wf-card wf-row"><span class="wf-grow">Co może się zepsuć: niepewne przedłużenie programu refundacji [3]</span><span class="wf-btn">Dodaj alert</span></div>
       <div class="wf-card wf-row"><span class="wf-grow">Karta oceny</span><span class="wf-muted">17,5 / 25 · mocno</span></div>
+      <div class="wf-card wf-row"><span class="wf-grow">Szkic tezy: 3 czynniki wzrostu · 2 zagrożenia</span><span class="wf-btn primary">Utwórz tezę</span></div>
     </div>
   </div>
 </section>
@@ -438,9 +448,12 @@ pre.out { font: 12px/1.5 var(--mono); background: var(--code-bg); border: 1px so
   <h2>Kryteria akceptacji</h2>
   <ul class="checks">
     <li><code>AC-raport-1</code> Jako inwestor chcę zamówić pełny raport dla spółki wskazanej nazwą albo tickerem, żeby poznać ją od zera.</li>
-    <li><code>AC-raport-2</code> Jako inwestor chcę, żeby raport miał sekcje w kolejności: Sedno, Rozwinięcie, Model biznesowy, Konkurencja, Przychody i marża, Zarząd, Wycena, Ryzyka, Karta oceny, żeby każdy raport czytać tak samo.</li>
-    <li><code>AC-raport-3</code> Jako inwestor chcę, żeby raport odpowiadał wprost na trzy pytania: jak firma zarabia, co może się zepsuć i co napędza wzrost, żeby wiedzieć, dlaczego coś się w spółce dzieje.</li>
-    <li><code>AC-raport-4</code> Jako inwestor chcę, żeby przy każdym czynniku wzrostu stała konkretna metryka, jeśli taka istnieje, żeby wzrost był mierzalny, a nie opisowy.</li>
+    <li><code>AC-raport-2</code> Jako inwestor chcę, żeby raport miał sekcje w kolejności: Sedno, Jak firma zarabia, Co napędza wzrost, Co może się zepsuć, Karta oceny, Wykres, Szkic tezy, żeby każdy raport czytać tak samo.</li>
+    <li><code>AC-raport-3</code> Jako inwestor chcę, żeby raport odpowiadał wprost na trzy pytania, każde w swojej sekcji: jak firma zarabia, co napędza wzrost i co może się zepsuć, żeby wiedzieć, dlaczego coś się w spółce dzieje.</li>
+    <li><code>AC-raport-4</code> Jako inwestor chcę, żeby przy każdym czynniku wzrostu stała konkretna metryka, jeśli taka istnieje, z wartością teraz, trendem z ostatnich 4–8 kwartałów, źródłem i progiem, przy którym czynnik działa albo przestał działać, żeby wzrost był mierzalny, a nie opisowy.</li>
+    <li><code>AC-raport-8</code> Jako inwestor chcę, żeby czynnik wzrostu, którego nie da się zmierzyć, był oznaczony jako jakościowy, z pośrednim wskaźnikiem, jeśli taki istnieje, żeby nie wisiał bez możliwości sprawdzenia.</li>
+    <li><code>AC-raport-9</code> Jako inwestor chcę, żeby przy każdym zagrożeniu stał warunek, po którym widać, że się realizuje, żeby monitoring mógł je sprawdzać.</li>
+    <li><code>AC-raport-10</code> Jako inwestor chcę, żeby raport kończył się szkicem tezy: czynnikami wzrostu i zagrożeniami jako punktami do sprawdzania, z których jednym działaniem utworzę tezę, żeby raport od razu prowadził do tezy.</li>
     <li><code>AC-raport-5</code> Jako inwestor chcę, żeby raport był zrozumiały bez wcześniejszej wiedzy o spółce, z pojęciami branżowymi wyjaśnionymi przy pierwszym użyciu, żeby nie szukać ich gdzie indziej.</li>
     <li><code>AC-raport-6</code> Jako inwestor chcę widzieć w raporcie wykres z aktualną ceną, cenami docelowymi analityków na 12 miesięcy i upside, żeby od razu znać oczekiwania rynku.</li>
     <li><code>AC-raport-7</code> Jako inwestor chcę, żeby przy braku cen docelowych wykres pokazał samą cenę z informacją o braku rekomendacji, żeby nie zobaczyć pustego wykresu ani zmyślonych wartości.</li>
